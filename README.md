@@ -22,26 +22,47 @@ You will need a modern web browser to run this application.
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repo:
     ```sh
     git clone https://github.com/TheOriginalBob0705/heptapod-dictionary.git
     ```
 
-2. Navigate to the project directory:
+2. Install NPM packages for both the frontend and backend:
     ```sh
     cd heptapod-dictionary
+    cd frontend
+    npm install
+    cd ../backend
+    npm install
     ```
 
-3. Open `index.html` in your preferred web browser.
+3. Start the backend server:
+   ```sh
+   cd backend
+   npm run server
+   ```
+   
+4. Start the frontend:
+   ```sh
+   cd ../frontend
+   npm start
+   ```
+   The frontend development server will start running on http://localhost:3000.
+
+## Folder Structure
+
+frontend/: Contains the React.js webapp code.
+
+backend/: Contains the SQLite3 database server code.
 
 ## Contributing
 
 Contributions are welcome! Please follow these steps to contribute:
 
 1. Fork the repository.
-2. Create a new branch: `git checkout -b feature-branch`.
-3. Make your changes and commit them: `git commit -m 'Add some feature'`.
-4. Push to the branch: `git push origin feature-branch`.
+2. Create a new branch: `git checkout -b feature/someNewFeature`.
+3. Make your changes and commit them: `git commit -m 'add some new feature'`.
+4. Push to the branch: `git push origin feature/someNewFeature`.
 5. Open a pull request.
 
 ## License
