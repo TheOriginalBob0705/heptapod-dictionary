@@ -1,4 +1,4 @@
-# Personal Logogram Dictionary
+# Rook's Heptapod Dictionary
 
 The Rook's Heptapod Dictionary is a web application that helps you translate phrases written in Rook's Heptapod, a 
 writing system I created based on the logograms from Ted Chiang's novel "Story of Your Life" and the movie "Arrival". 
@@ -10,7 +10,7 @@ I'm putting this repository out there for anyone interested in following along w
 ## Features
 
 - Search for a word
-- View the logogram for that word, its English definition, pronunciation
+- View the logogram for that word, a list of other words that logogram can be used for, its pronunciation in English, and a list of its definitions
 
 ## Setup and Installation
 
