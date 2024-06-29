@@ -11,6 +11,7 @@
         ],
         "verb": ["to ascertain or calculate the duration or speed of"]
       },
+      "components": ["past", "present", "future"],
       "other_meanings": ["moment", "chronology"]
     },
     {

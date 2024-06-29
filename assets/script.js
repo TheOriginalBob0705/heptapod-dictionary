@@ -66,6 +66,12 @@ function displayWordDetails(word, logograms) {
                             ${selectedLogogram.definitions[partOfSpeech].map(definition => `<li>${definition}</li>`).join('')}
                         </ul>
                     `).join('')}
+                    ${selectedLogogram.components ? `
+                    <h3>Logographic Components</h3>
+                    <ul>
+                        ${selectedLogogram.components.map(component => `<li>${component}</li>`).join('')}
+                    </ul>
+                ` : ''}
                     <h3>This logogram also means:</h3>
                     <ul>
                         ${selectedLogogram.other_meanings.map(meaning => `<li>${meaning}</li>`).join('')}
