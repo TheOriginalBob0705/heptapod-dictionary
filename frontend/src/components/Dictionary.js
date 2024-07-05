@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const Dictionary = () => {
@@ -60,6 +60,7 @@ const Dictionary = () => {
                             <div className="logogram_container">
                                 <img
                                     src={`data:image/png;base64,${item.logogram_base64}`}
+                                    alt={item.word}
                                     className="logogram_picture"
                                     onClick={() => fetchComponents(item.definition_id)}
                                 />
@@ -73,6 +74,7 @@ const Dictionary = () => {
                                             <div key={component.definition_id} className="component_item">
                                                 <img
                                                     src={`data:image/png;base64,${component.logogram_base64}`}
+                                                    alt={component.word}
                                                     className="logogram_picture"
                                                 />
                                                 <h3>{component.word}</h3>

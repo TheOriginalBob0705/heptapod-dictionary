@@ -93,7 +93,7 @@ app.get('/api/logograms/:word', (req, res) => {
     const word = req.params.word;
     const sql = `
         SELECT
-            d.definition_id, d.definition, l.logogram_base64, e.example_sentence
+            d.definition_id, d.definition, l.logogram_base64, e.example_sentence, w.word
         FROM
             words w
                 JOIN
