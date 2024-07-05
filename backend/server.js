@@ -17,20 +17,9 @@ const db = new sqlite3.Database('./dictionary.db', (err) => {
 });
 
 // Routes
-app.get('/api/logograms', (req, res) => {
-    const sql = 'SELECT * FROM logograms';
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            res.status(400).json({ "error": err.message });
-            return;
-        }
-        res.json(rows);
-    });
-});
-
-app.get('/api/logogram/:id', (req, res) => {
-    const sql = 'SELECT * FROM logograms WHERE id = ?';
-    const params = [req.params.id];
+app.get('/api/word/:wordId', (req, res) => {
+    const sql = 'SELECT * FROM words WHERE word_id = ?';
+    const params = [req.params.wordId];
     db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({ "error": err.message });
@@ -40,9 +29,31 @@ app.get('/api/logogram/:id', (req, res) => {
     });
 });
 
-app.get('/api/definitions/:logogram_id', (req, res) => {
-    const sql = 'SELECT * FROM definitions WHERE logogram_id = ?';
-    const params = [req.params.logogram_id];
+app.get('/api/definitions/:wordId', (req, res) => {
+    const sql = `
+        SELECT
+            d.definition_id, d.definition, l.logogram_base64, e.example_sentence
+        FROM
+            definitions d
+                LEFT JOIN
+            logograms l ON d.definition_id = l.definition_id
+                LEFT JOIN
+            examples e ON d.definition_id = e.definition_id
+        WHERE
+            d.word_id = ?
+    `;
+    db.all(sql, [req.params.wordId], (err, rows) => {
+        if (err) {
+            res.status(400).json({ "error": err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
+app.get('/api/example_sentences/:definitionId', (req, res) => {
+    const sql = 'SELECT * FROM examples WHERE definition_id = ?';
+    const params = [req.params.definitionId];
     db.all(sql, params, (err, rows) => {
         if (err) {
             res.status(400).json({ "error": err.message });
@@ -52,10 +63,49 @@ app.get('/api/definitions/:logogram_id', (req, res) => {
     });
 });
 
-app.get('/api/example_sentences/:definition_id', (req, res) => {
-    const sql = 'SELECT * FROM example_sentences WHERE definition_id = ?';
-    const params = [req.params.definition_id];
-    db.all(sql, params, (err, rows) => {
+app.get('/api/components/:wordId', (req, res) => {
+    const sql = `
+        SELECT
+            w.word, d.definition_id, d.definition, l.logogram_base64, e.example_sentence
+        FROM
+            components c
+                JOIN
+            definitions d ON c.component_definition_id = d.definition_id
+                JOIN
+            words w ON c.component_word_id = w.word_id
+                LEFT JOIN
+            logograms l ON d.definition_id = l.definition_id
+                LEFT JOIN
+            examples e ON d.definition_id = e.definition_id
+        WHERE
+            c.definition_id = ?
+    `;
+    db.all(sql, [req.params.wordId], (err, rows) => {
+        if (err) {
+            res.status(400).json({ "error": err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
+app.get('/api/logograms/:word', (req, res) => {
+    const word = req.params.word;
+    const sql = `
+        SELECT
+            d.definition_id, d.definition, l.logogram_base64, e.example_sentence
+        FROM
+            words w
+                JOIN
+            definitions d ON w.word_id = d.word_id
+                LEFT JOIN
+            logograms l ON d.definition_id = l.definition_id
+                LEFT JOIN
+            examples e ON d.definition_id = e.definition_id
+        WHERE
+            w.word = ?
+    `;
+    db.all(sql, [word], (err, rows) => {
         if (err) {
             res.status(400).json({ "error": err.message });
             return;
