@@ -114,6 +114,33 @@ app.get('/api/logograms/:word', (req, res) => {
     });
 });
 
+app.get('/api/suggestions/:searchTerm', (req, res) => {
+    const searchTerm = `${req.params.searchTerm}%`;
+    const sql = 'SELECT word FROM words WHERE word LIKE ?';
+    db.all(sql, [searchTerm], (err, rows) => {
+        if (err) {
+            res.status(400).json({ "error": err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
+app.get('/api/random', (req, res) => {
+    const sql = `
+        SELECT word FROM words
+        ORDER BY RANDOM()
+        LIMIT 1
+    `;
+    db.get(sql, [], (err, row) => {
+        if (err) {
+            res.status(400).json({ "error": err.message });
+            return;
+        }
+        res.json(row);
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

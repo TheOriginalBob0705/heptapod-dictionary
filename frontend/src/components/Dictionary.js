@@ -1,37 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Dictionary = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [wordData, setWordData] = useState([]);
-
-    // State to hold components data for each definition
     const [componentsData, setComponentsData] = useState({});
-    // State to manage whether to show components for each definition
     const [showComponents, setShowComponents] = useState({});
+    const [suggestions, setSuggestions] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
 
-    // Function to handle search and fetch word data
-    const handleSearch = async () => {
+    const handleSearch = async (term) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/logograms/${searchTerm}`);
-            setWordData(response.data);
+            const response = await axios.get(`http://localhost:5000/api/logograms/${term}`);
+            if (response.data.length === 0) {
+                setErrorMessage(`"${term}" doesn't exist. Try again.`);
+                setWordData([]);
+            } else {
+                setWordData(response.data);
+                setErrorMessage('');
+            }
         } catch (error) {
             console.error('Error fetching data', error);
         }
     };
 
-    // Function to fetch components for a specific definition
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch(searchTerm);
+        }
+    };
+
     const fetchComponents = async (definitionId) => {
         try {
             const response = await axios.get(`http://localhost:5000/api/components/${definitionId}`);
-            // Update componentsData with fetched components for the specific definitionId
             setComponentsData(prevState => ({ ...prevState, [definitionId]: response.data }));
-            // Toggle showComponents flag for the specific definitionId
             setShowComponents(prevState => ({ ...prevState, [definitionId]: !prevState[definitionId] }));
         } catch (error) {
             console.error('Error fetching components', error);
         }
     };
+
+    const fetchSuggestions = async (term) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/suggestions/${term}`);
+            setSuggestions(response.data);
+        } catch (error) {
+            console.error('Error fetching suggestions', error);
+        }
+    };
+
+    const fetchRandomWord = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/random');
+            setSearchTerm(response.data.word);
+            handleSearch(response.data.word);
+        } catch (error) {
+            console.error('Error fetching random word', error);
+        }
+    };
+
+    useEffect(() => {
+        if (searchTerm) {
+            fetchSuggestions(searchTerm);
+        } else {
+            setSuggestions([]);
+        }
+    }, [searchTerm]);
 
     return (
         <div>
@@ -40,6 +75,7 @@ const Dictionary = () => {
                 <nav>
                     <ul>
                         <li><a href="#">Home</a></li>
+                        <li><a onClick={fetchRandomWord}>Random Word</a></li>
                     </ul>
                 </nav>
             </header>
@@ -50,10 +86,26 @@ const Dictionary = () => {
                         id="search"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyPress={handleKeyPress}
                         placeholder="Search for a word"
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setTimeout(() => setIsFocused(false), 100)}
                     />
-                    <button onClick={handleSearch}>Search</button>
+                    <button onClick={() => handleSearch(searchTerm)}>Search</button>
                 </div>
+                {errorMessage && <p>{errorMessage}</p>}
+                {isFocused && suggestions.length > 0 && (
+                    <div id="suggestions">
+                        {suggestions.map((suggestion) => (
+                            <div key={suggestion.word} onClick={() => {
+                                setSearchTerm(suggestion.word);
+                                handleSearch(suggestion.word);
+                            }}>
+                                {suggestion.word}
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <div id="logogram_details">
                     {wordData.map((item) => (
                         <div key={item.definition_id} className="word_details_container">
@@ -79,7 +131,7 @@ const Dictionary = () => {
                                                 />
                                                 <h3>{component.word}</h3>
                                                 <p>{component.definition}</p>
-                                                <p>"{component.example_sentence}"</p>
+                                                <p>{component.example_sentence}</p>
                                             </div>
                                         ))}
                                     </div>
