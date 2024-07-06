@@ -9,7 +9,8 @@ I'm putting this repository out there for anyone interested in following along w
 ## Features
 
 - Search for a word
-- View the logogram for that word, a list of other words that logogram can be used for, its pronunciation in English, and a list of its definitions
+- View the logogram for that word, its English equivalent, the definition, and an example sentence
+- Clicking on a logogram displays the set of component logograms that make up the entire symbol
 
 ## Setup and Installation
 
