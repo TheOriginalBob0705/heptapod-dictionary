@@ -123,14 +123,15 @@ const Dictionary = () => {
                                 <p>"{item.example_sentence}"</p>
                                 {showComponents[item.definition_id] && (
                                     <div className="components_container">
+                                        <h3>Component symbols:</h3>
                                         {componentsData[item.definition_id]?.map((component) => (
                                             <div key={component.definition_id} className="component_item">
                                                 <img
                                                     src={`data:image/png;base64,${component.logogram_base64}`}
                                                     alt={component.word}
-                                                    className="logogram_picture"
+                                                    className="logogram_component_picture"
                                                 />
-                                                <div class="component_text">
+                                                <div className="component_text">
                                                     <h3>{component.word} ({component.word_type})</h3>
                                                     <p>{component.definition}</p>
                                                     <p>"{component.example_sentence}"</p>

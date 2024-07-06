@@ -146,7 +146,20 @@ main {
 }
 
 .logogram_picture:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
+}
+
+.logogram_component_picture {
+  width: 15rem;
+  height: 15rem;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.logogram_component_picture:hover {
+  transform: scale(1.03);
 }
 
 .text_info_container {
