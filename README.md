@@ -2,7 +2,7 @@
 
 The Rook's Heptapod Dictionary is a web application that helps you translate phrases written in Rook's Heptapod, a 
 writing system I created based on the logograms from Ted Chiang's novel "Story of Your Life" and the movie "Arrival". 
-This project also has a system for me to add new words, their pronunciations, and definitions, and view them in an 
+This project will also have (WIP) a system for me to add new words, their pronunciations, and definitions, and view them in an 
 organized manner.
 
 I'm putting this repository out there for anyone interested in following along with the project.
