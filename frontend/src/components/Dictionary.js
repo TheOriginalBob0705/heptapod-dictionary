@@ -118,7 +118,8 @@ const Dictionary = () => {
                                 />
                             </div>
                             <div className="text_info_container">
-                                <h2>{item.definition}</h2>
+                                <h2>{item.word} ({item.word_type})</h2>
+                                <p>{item.definition}</p>
                                 <p>"{item.example_sentence}"</p>
                                 {showComponents[item.definition_id] && (
                                     <div className="components_container">
@@ -129,9 +130,11 @@ const Dictionary = () => {
                                                     alt={component.word}
                                                     className="logogram_picture"
                                                 />
-                                                <h3>{component.word}</h3>
-                                                <p>{component.definition}</p>
-                                                <p>{component.example_sentence}</p>
+                                                <div class="component_text">
+                                                    <h3>{component.word} ({component.word_type})</h3>
+                                                    <p>{component.definition}</p>
+                                                    <p>"{component.example_sentence}"</p>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
